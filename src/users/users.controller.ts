@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { BaseController } from '../common/base.controller';
+import { HttpError } from '../errors/http-error.class';
 import { LoggerService } from '../services/logger.service';
 
 export class UsersController extends BaseController {
@@ -16,6 +17,7 @@ export class UsersController extends BaseController {
   }
 
   register(req: Request, res: Response, next: NextFunction): void {
-    this.sendCreated('register', res);
+    // this.sendCreated('register', res);
+    next(new HttpError(400, 'error registering user', 'register'));
   }
 }
