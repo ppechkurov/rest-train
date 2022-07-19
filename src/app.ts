@@ -16,6 +16,13 @@ export class App {
 
   public init() {
     this.server = this.app.listen(this.port);
-    this.logger.log(`Server running on port ${this.port}...`);
+
+    this.server.on('listening', () => {
+      this.logger.log(`Server running on port ${this.port}...`);
+    });
+
+    this.server.on('error', (err: Error) => {
+      this.logger.error(err.message);
+    });
   }
 }
