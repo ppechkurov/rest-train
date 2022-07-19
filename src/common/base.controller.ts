@@ -3,15 +3,15 @@ import { LoggerService } from '../services/logger.service';
 import { IRoute } from './route.interface';
 
 export abstract class BaseController {
-  private readonly router: Router;
+  public readonly router: Router;
 
-  constructor(private logger: LoggerService) {
+  constructor(protected logger: LoggerService) {
     this.router = Router();
   }
 
   protected bindRoutes(routes: IRoute[]) {
     routes.forEach((route) => {
-      this.logger.log(`[${route.method} ${route.path}]`);
+      this.logger.log(`[${route.method}] ${route.path}`);
       this.router[route.method](route.path, route.func.bind(this));
     });
   }
