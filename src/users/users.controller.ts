@@ -8,16 +8,16 @@ export class UsersController extends BaseController {
     super(logger);
     this.bindRoutes([
       { path: '/login', method: 'get', func: this.login },
-      { path: '/register', method: 'get', func: this.register },
+      { path: '/register', method: 'post', func: this.register },
     ]);
   }
 
   login(req: Request, res: Response, next: NextFunction): void {
-    this.sendOk('login', res);
+    this.sendOk(res);
   }
 
   register(req: Request, res: Response, next: NextFunction): void {
     // this.sendCreated('register', res);
-    next(new HttpError(400, 'error registering user', 'register'));
+    next(new HttpError(400, 'error registering user', req.originalUrl));
   }
 }

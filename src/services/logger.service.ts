@@ -1,4 +1,5 @@
 import { Logger } from 'tslog';
+import { HttpError } from '../errors/http-error.class';
 
 export class LoggerService {
   private logger: Logger;
@@ -20,7 +21,15 @@ export class LoggerService {
     this.logger.warn(...args);
   }
 
-  error(...args: unknown[]) {
-    this.logger.error(...args);
+  error(error: HttpError): void;
+  error(...args: unknown[]): void;
+  error(...args: unknown[]): void {
+    if (args[0] instanceof HttpError) {
+      const { code, message, context } = args[0];
+      const errorMessage = `${code}: ${message} at ${context}`;
+      this.logger.error(errorMessage);
+    } else {
+      this.logger.error(...args);
+    }
   }
 }

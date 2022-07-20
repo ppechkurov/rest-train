@@ -16,8 +16,8 @@ export abstract class BaseController {
     });
   }
 
-  public sendOk<T>(message: T, res: Response) {
-    return this.send(200, message, res);
+  public sendOk(res: Response) {
+    return this.send(200, 'OK', res);
   }
 
   public sendCreated<T>(message: T, res: Response) {

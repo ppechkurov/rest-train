@@ -12,11 +12,10 @@ export class ExceptionFilter {
     next: NextFunction
   ): void {
     if (error instanceof HttpError) {
-      const { context, code, message } = error;
-      this.logger.error(`[${context}] Error ${code}: ${message}`);
+      this.logger.error(error);
       res.status(error.code).send({ error: error.message });
     } else {
-      this.logger.error(`${error.message}`);
+      this.logger.error(error.message);
       res.status(500).send({ error: error.message });
     }
   }
