@@ -18,6 +18,6 @@ export class UsersController extends BaseController {
 
   register(req: Request, res: Response, next: NextFunction): void {
     // this.sendCreated('register', res);
-    next(new HttpError(400, 'error registering user', req.originalUrl));
+    throw new HttpError(400, 'error registering user', req.originalUrl);
   }
 }

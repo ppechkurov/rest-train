@@ -13,10 +13,11 @@ export class ExceptionFilter {
   ): void {
     if (error instanceof HttpError) {
       this.logger.error(error);
-      res.status(error.code).send({ error: error.message });
+      res.status(error.code);
     } else {
       this.logger.error(error.message);
-      res.status(500).send({ error: error.message });
+      res.status(500);
     }
+    res.send({ error: error.message });
   }
 }
