@@ -1,8 +1,8 @@
 import { Express } from 'express';
 import { Server } from 'http';
-import { ExceptionFilter } from './errors/exception.filter.class';
-import { LoggerService } from './services/logger.service';
-import { UsersController } from './users/users.controller';
+import { ExceptionFilter } from './errors/exception.filter.class.js';
+import { LoggerService } from './services/logger.service.js';
+import { UsersController } from './users/users.controller.js';
 
 export class App {
   public server: Server;

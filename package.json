@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node ./src/run.ts"
+    "start": "ts-node ./src/run.ts",
+    "dev" : "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +14,6 @@
   "dependencies": {
     "express": "^4.18.1",
     "pg": "^8.7.3",
-    "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.3",
     "tslog": "^3.3.3"
   },

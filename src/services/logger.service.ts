@@ -1,5 +1,5 @@
 import { Logger } from 'tslog';
-import { HttpError } from '../errors/http-error.class';
+import { HttpError } from '../errors/http-error.class.js';
 
 export class LoggerService {
   private logger: Logger;

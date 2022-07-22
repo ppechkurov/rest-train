@@ -1,6 +1,6 @@
 import { Response, Router } from 'express';
-import { LoggerService } from '../services/logger.service';
-import { IRoute } from './route.interface';
+import { LoggerService } from '../services/logger.service.js';
+import { IRoute } from './route.interface.js';
 
 export abstract class BaseController {
   public readonly router: Router;

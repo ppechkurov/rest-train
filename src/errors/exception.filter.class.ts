@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { LoggerService } from '../services/logger.service';
-import { HttpError } from './http-error.class';
+import { LoggerService } from '../services/logger.service.js';
+import { HttpError } from './http-error.class.js';
 
 export class ExceptionFilter {
   constructor(private logger: LoggerService) {}
