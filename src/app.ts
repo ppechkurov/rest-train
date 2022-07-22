@@ -12,7 +12,7 @@ export class App {
     public port: number,
     public logger: LoggerService,
     public usersController: UsersController,
-    public exceptionFilter: ExceptionFilter
+    public exceptionFilter: ExceptionFilter,
   ) {}
 
   useRoutes(): void {
@@ -23,7 +23,7 @@ export class App {
     this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
-  public init() {
+  public init(): void {
     this.useRoutes();
     this.useExceptionFilter();
 

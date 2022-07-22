@@ -4,7 +4,7 @@ import { ExceptionFilter } from './errors/exception.filter.class';
 import { LoggerService } from './services/logger.service';
 import { UsersController } from './users/users.controller';
 
-function run(port: number) {
+function run(port: number): void {
   const logger = new LoggerService();
 
   const app = new App(
@@ -12,7 +12,7 @@ function run(port: number) {
     port,
     logger,
     new UsersController(logger),
-    new ExceptionFilter(logger)
+    new ExceptionFilter(logger),
   );
 
   app.init();
