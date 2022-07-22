@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import { Express } from 'express';
 import { Server } from 'http';
 import { ExceptionFilter } from './errors/exception.filter.class';
 import { LoggerService } from './services/logger.service';
