@@ -1,10 +1,11 @@
 import 'reflect-metadata';
-import express, { Express } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
 import { inject, injectable } from 'inversify';
 import { ILogger } from './services/logger.interface.js';
 import { TYPES } from './types.js';
 import { IUsersController } from './users/users.controller.interface.js';
+import bodyParser from 'body-parser';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
 
 @injectable()
@@ -23,6 +24,15 @@ export class App {
     this.app.use('/users', this.usersController.router);
   }
 
+  useMiddlewares(): void {
+    this.app.use(bodyParser.json());
+    this.app.use((req: Request, res: Response, next: NextFunction) => {
+      const { method, url } = req;
+      this.logger.log(`Incoming ${method}-request: ${url}`);
+      next();
+    });
+  }
+
   useExceptionFilter(): void {
     this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
@@ -31,6 +41,7 @@ export class App {
     this.app = express();
     this.port = port;
 
+    this.useMiddlewares();
     this.useRoutes();
     this.useExceptionFilter();
 
