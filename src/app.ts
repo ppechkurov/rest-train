@@ -1,18 +1,22 @@
-import { Express } from 'express';
+import 'reflect-metadata';
+import express, { Express } from 'express';
 import { Server } from 'http';
+import { inject, injectable } from 'inversify';
 import { ExceptionFilter } from './errors/exception.filter.class.js';
-import { LoggerService } from './services/logger.service.js';
+import { ILogger } from './services/logger.interface.js';
+import { TYPES } from './types.js';
 import { UsersController } from './users/users.controller.js';
 
+@injectable()
 export class App {
+  public app: Express;
+  public port: number;
   public server: Server;
 
   constructor(
-    public app: Express,
-    public port: number,
-    public logger: LoggerService,
-    public usersController: UsersController,
-    public exceptionFilter: ExceptionFilter,
+    @inject(TYPES.ILogger) private logger: ILogger,
+    @inject(TYPES.UsersController) private usersController: UsersController,
+    @inject(TYPES.ExceptionFilter) private exceptionFilter: ExceptionFilter,
   ) {}
 
   useRoutes(): void {
@@ -23,7 +27,10 @@ export class App {
     this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
-  public init(): void {
+  public init(port: number): void {
+    this.app = express();
+    this.port = port;
+
     this.useRoutes();
     this.useExceptionFilter();
 
