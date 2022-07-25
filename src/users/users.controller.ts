@@ -5,9 +5,10 @@ import { TYPES } from '../types.js';
 import { ILogger } from '../services/logger.interface.js';
 import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/http-error.class.js';
+import { IUsersController } from './users.controller.interface.js';
 
 @injectable()
-export class UsersController extends BaseController {
+export class UsersController extends BaseController implements IUsersController {
   constructor(@inject(TYPES.ILogger) logger: ILogger) {
     super(logger);
     this.bindRoutes([
@@ -22,6 +23,6 @@ export class UsersController extends BaseController {
 
   register(req: Request, res: Response, next: NextFunction): void {
     // this.sendCreated('register', res);
-    throw new HttpError(400, 'authorization error', req.originalUrl);
+    throw new HttpError(400, 'authorization error', ` at ${req.originalUrl}`);
   }
 }

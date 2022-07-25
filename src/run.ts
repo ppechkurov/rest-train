@@ -1,19 +1,27 @@
 import 'reflect-metadata';
-import { Container } from 'inversify';
+import { Container, ContainerModule, interfaces } from 'inversify';
 import { TYPES } from './types.js';
 import { App } from './app.js';
 import { ILogger } from './services/logger.interface.js';
 import { LoggerService } from './services/logger.service.js';
 import { UsersController } from './users/users.controller.js';
 import { ExceptionFilter } from './errors/exception.filter.class.js';
+import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import { IUsersController } from './users/users.controller.interface.js';
 
-const appContainer = new Container();
-appContainer.bind<App>(TYPES.Application).to(App);
-appContainer.bind<ILogger>(TYPES.ILogger).to(LoggerService);
-appContainer.bind<UsersController>(TYPES.UsersController).to(UsersController);
-appContainer.bind<ExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter);
+export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
+  bind<App>(TYPES.Application).to(App);
+  bind<ILogger>(TYPES.ILogger).to(LoggerService);
+  bind<IUsersController>(TYPES.IUsersController).to(UsersController);
+  bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
+});
 
-const app = appContainer.get<App>(TYPES.Application);
-app.init(Number(process.env.PORT) || 5000);
+function bootstrap(): { app: App; appContainer: Container } {
+  const appContainer = new Container();
+  appContainer.load(appBindings);
+  const app = appContainer.get<App>(TYPES.Application);
+  app.init(Number(process.env.PORT) || 5000);
+  return { app, appContainer };
+}
 
-export { app, appContainer };
+export const { app, appContainer } = bootstrap();

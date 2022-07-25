@@ -30,7 +30,7 @@ export class LoggerService implements ILogger {
   error(...args: unknown[]): void {
     if (args[0] instanceof HttpError) {
       const { code, message, context } = args[0];
-      const errorMessage = `${code}: ${message} at ${context}`;
+      const errorMessage = `${code}: ${message}` + `${context ?? ''}`;
       this.logger.error(errorMessage);
     } else {
       this.logger.error(...args);

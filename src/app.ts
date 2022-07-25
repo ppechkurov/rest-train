@@ -2,10 +2,10 @@ import 'reflect-metadata';
 import express, { Express } from 'express';
 import { Server } from 'http';
 import { inject, injectable } from 'inversify';
-import { ExceptionFilter } from './errors/exception.filter.class.js';
 import { ILogger } from './services/logger.interface.js';
 import { TYPES } from './types.js';
-import { UsersController } from './users/users.controller.js';
+import { IUsersController } from './users/users.controller.interface.js';
+import { IExceptionFilter } from './errors/exception.filter.interface.js';
 
 @injectable()
 export class App {
@@ -15,8 +15,8 @@ export class App {
 
   constructor(
     @inject(TYPES.ILogger) private logger: ILogger,
-    @inject(TYPES.UsersController) private usersController: UsersController,
-    @inject(TYPES.ExceptionFilter) private exceptionFilter: ExceptionFilter,
+    @inject(TYPES.IUsersController) private usersController: IUsersController,
+    @inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
   ) {}
 
   useRoutes(): void {

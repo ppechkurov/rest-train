@@ -4,9 +4,10 @@ import { TYPES } from '../types.js';
 import { ILogger } from '../services/logger.interface.js';
 import { HttpError } from './http-error.class.js';
 import { NextFunction, Request, Response } from 'express';
+import { IExceptionFilter } from './exception.filter.interface.js';
 
 @injectable()
-export class ExceptionFilter {
+export class ExceptionFilter implements IExceptionFilter {
   constructor(@inject(TYPES.ILogger) private logger: ILogger) {}
 
   catch(error: Error | HttpError, req: Request, res: Response, next: NextFunction): void {
