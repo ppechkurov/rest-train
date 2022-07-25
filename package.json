@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node ./src/run.ts",
+    "start": "node ./dist/run.js",
+    "build": "tsc",
     "dev" : "nodemon"
   },
   "keywords": [],
