@@ -4,7 +4,7 @@ import { Server } from 'http';
 import { inject, injectable } from 'inversify';
 import { ILogger } from './services/logger.interface.js';
 import { TYPES } from './types.js';
-import { IUsersController } from './users/users.controller.interface.js';
+import { IUsersController } from './users/interfaces/users.controller.interface.js';
 import bodyParser from 'body-parser';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
 

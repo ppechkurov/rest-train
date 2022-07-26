@@ -1,19 +1,23 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../common/base.controller.js';
+import { IUsersController } from './interfaces/users.controller.interface.js';
 import { TYPES } from '../types.js';
 import { ILogger } from '../services/logger.interface.js';
+import { IUsersService } from './interfaces/users.service.interface.js';
 import { NextFunction, Request, Response } from 'express';
-import { HttpError } from '../errors/http-error.class.js';
-import { IUsersController } from './users.controller.interface.js';
 import { UserLoginDto } from '../dto/user-login.dto.js';
 import { UserRegisterDto } from '../dto/user-register.dto.js';
+import { HttpError } from '../errors/http-error.class.js';
 import { User } from './user.entity.js';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
-  constructor(@inject(TYPES.ILogger) logger: ILogger) {
-    super(logger);
+  constructor(
+    @inject(TYPES.ILogger) loggerService: ILogger,
+    @inject(TYPES.IUsersService) private usersService: IUsersService,
+  ) {
+    super(loggerService);
     this.bindRoutes([
       { path: '/login', method: 'get', func: this.login },
       { path: '/register', method: 'post', func: this.register },
@@ -21,8 +25,8 @@ export class UsersController extends BaseController implements IUsersController 
   }
 
   login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-    console.log(req.body);
-    this.sendOk(res);
+    const user = new User(req.body.email, req.body.password);
+    this.sendOk(res, user);
   }
 
   async register(
@@ -30,10 +34,8 @@ export class UsersController extends BaseController implements IUsersController 
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    const { name, email, password } = body;
-    const user = new User(name, email);
-    await user.setPassword(password);
-
-    this.sendCreated(user, res);
+    const result = await this.usersService.createUser(body);
+    if (!result) return next(new HttpError(422, 'This user already exists'));
+    this.sendOk(res, result);
   }
 }
