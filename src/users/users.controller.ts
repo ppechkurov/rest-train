@@ -10,6 +10,7 @@ import { UserLoginDto } from '../dto/user-login.dto.js';
 import { UserRegisterDto } from '../dto/user-register.dto.js';
 import { HttpError } from '../errors/http-error.class.js';
 import { User } from './user.entity.js';
+import { ValidationMiddleware } from '../common/validation.middleware.js';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
@@ -19,8 +20,17 @@ export class UsersController extends BaseController implements IUsersController 
   ) {
     super(loggerService);
     this.bindRoutes([
-      { path: '/login', method: 'get', func: this.login },
-      { path: '/register', method: 'post', func: this.register },
+      {
+        path: '/login',
+        method: 'get',
+        func: this.login,
+      },
+      {
+        path: '/register',
+        method: 'post',
+        func: this.register,
+        middlewares: [new ValidationMiddleware(UserRegisterDto)],
+      },
     ]);
   }
 
