@@ -8,7 +8,7 @@ import { IExceptionFilter } from './exception.filter.interface.js';
 
 @injectable()
 export class ExceptionFilter implements IExceptionFilter {
-  constructor(@inject(TYPES.ILogger) private logger: ILogger) {}
+  constructor(@inject(TYPES.Logger) private logger: ILogger) {}
 
   catch(error: Error | HttpError, req: Request, res: Response, next: NextFunction): void {
     if (error instanceof HttpError) {

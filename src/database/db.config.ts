@@ -8,7 +8,7 @@ import { Dialect } from 'sequelize';
 export class DbConfig {
   public readonly options: SequelizeOptions;
 
-  constructor(@inject(TYPES.IConfigService) private configService: IConfigService) {
+  constructor(@inject(TYPES.ConfigService) private configService: IConfigService) {
     this.options = {
       database: this.configService.get('DB_NAME'),
       username: this.configService.get('DB_USER'),

@@ -1,10 +1,11 @@
 export const TYPES = {
   Application: Symbol.for('Application'),
-  ILogger: Symbol.for('ILogger'),
-  IUsersController: Symbol.for('IUsersController'),
-  IUsersService: Symbol.for('IUsersService'),
-  IConfigService: Symbol.for('IConfigService'),
-  IExceptionFilter: Symbol.for('IExceptionFilter'),
-  IRepositoryService: Symbol.for('RepositoryService'),
+  Logger: Symbol.for('Logger'),
+  UsersController: Symbol.for('UsersController'),
+  UsersService: Symbol.for('UsersService'),
+  ConfigService: Symbol.for('ConfigService'),
+  ExceptionFilter: Symbol.for('ExceptionFilter'),
+  RepositoryService: Symbol.for('RepositoryService'),
+  UsersRepository: Symbol.for('UsersRepository'),
   DbConfig: Symbol.for('DbConfig'),
 };

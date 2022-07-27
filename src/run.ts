@@ -14,16 +14,19 @@ import { ConfigService } from './config/config.service.js';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
 import { RepositoryService } from './database/repository.service.js';
 import { DbConfig } from './database/db.config.js';
+import { IUsersRepository } from './users/interfaces/users.repository.interface.js';
+import { UsersRepository } from './users/users.repository.js';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
-  bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
-  bind<IUsersController>(TYPES.IUsersController).to(UsersController);
-  bind<IUsersService>(TYPES.IUsersService).to(UsersService);
-  bind<IConfigService>(TYPES.IConfigService).to(ConfigService).inSingletonScope();
-  bind<RepositoryService>(TYPES.IRepositoryService).to(RepositoryService).inSingletonScope();
-  bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
+  bind<ILogger>(TYPES.Logger).to(LoggerService).inSingletonScope();
+  bind<IUsersController>(TYPES.UsersController).to(UsersController);
+  bind<IUsersService>(TYPES.UsersService).to(UsersService);
+  bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
+  bind<RepositoryService>(TYPES.RepositoryService).to(RepositoryService).inSingletonScope();
+  bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter);
   bind<DbConfig>(TYPES.DbConfig).to(DbConfig).inSingletonScope();
+  bind<IUsersRepository>(TYPES.UsersRepository).to(UsersRepository).inSingletonScope();
 });
 
 async function bootstrap(): Promise<{ app: App; appContainer: Container }> {

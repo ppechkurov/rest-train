@@ -16,10 +16,10 @@ export class App {
   public server: Server;
 
   constructor(
-    @inject(TYPES.ILogger) private logger: ILogger,
-    @inject(TYPES.IUsersController) private usersController: IUsersController,
-    @inject(TYPES.IRepositoryService) private repositoryService: RepositoryService,
-    @inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
+    @inject(TYPES.Logger) private logger: ILogger,
+    @inject(TYPES.UsersController) private usersController: IUsersController,
+    @inject(TYPES.RepositoryService) private repositoryService: RepositoryService,
+    @inject(TYPES.ExceptionFilter) private exceptionFilter: IExceptionFilter,
   ) {}
 
   useRoutes(): void {

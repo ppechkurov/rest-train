@@ -15,8 +15,8 @@ import { ValidationMiddleware } from '../common/validation.middleware.js';
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
   constructor(
-    @inject(TYPES.ILogger) loggerService: ILogger,
-    @inject(TYPES.IUsersService) private usersService: IUsersService,
+    @inject(TYPES.Logger) loggerService: ILogger,
+    @inject(TYPES.UsersService) private usersService: IUsersService,
   ) {
     super(loggerService);
     this.bindRoutes([

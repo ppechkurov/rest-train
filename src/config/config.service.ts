@@ -8,7 +8,7 @@ import { ILogger } from '../services/logger.interface.js';
 export class ConfigService implements IConfigService {
   private config: DotenvParseOutput;
 
-  constructor(@inject(TYPES.ILogger) private logger: ILogger) {
+  constructor(@inject(TYPES.Logger) private logger: ILogger) {
     const result: DotenvConfigOutput = config();
 
     if (result.error) {
