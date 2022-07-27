@@ -41,10 +41,8 @@ export class App {
   }
 
   public async init(port: number): Promise<void> {
-    this.repositoryService.client.authenticate();
-    this.logger.log('Database initialized...');
-    await this.repositoryService.client.sync();
-    this.logger.log('All models are syncronized...');
+    const result = await this.initDB().catch((err) => err);
+    if (result instanceof Error) return this.logger.error(result.message);
 
     this.app = express();
     this.port = port;
@@ -61,5 +59,12 @@ export class App {
       .on('error', (err: Error) => {
         this.logger.error(err);
       });
+  }
+
+  private async initDB(): Promise<void> {
+    await this.repositoryService.client.authenticate();
+    this.logger.log('Database initialized...');
+    await this.repositoryService.client.sync();
+    this.logger.log('All models are syncronized...');
   }
 }
