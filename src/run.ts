@@ -13,6 +13,7 @@ import { IConfigService } from './config/config.service.interface.js';
 import { ConfigService } from './config/config.service.js';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
 import { RepositoryService } from './database/repository.service.js';
+import { DbConfig } from './database/db.config.js';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
@@ -22,6 +23,7 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<IConfigService>(TYPES.IConfigService).to(ConfigService).inSingletonScope();
   bind<RepositoryService>(TYPES.IRepositoryService).to(RepositoryService).inSingletonScope();
   bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
+  bind<DbConfig>(TYPES.DbConfig).to(DbConfig).inSingletonScope();
 });
 
 async function bootstrap(): Promise<{ app: App; appContainer: Container }> {

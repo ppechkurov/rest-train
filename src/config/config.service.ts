@@ -12,9 +12,9 @@ export class ConfigService implements IConfigService {
     const result: DotenvConfigOutput = config();
 
     if (result.error) {
-      this.logger.error('Error parsing .env configuration');
+      this.logger.error('Error parsing .env configuration...');
     } else {
-      this.logger.log('.env configuration loaded');
+      this.logger.log('.env configuration loaded...');
       this.config = result.parsed as DotenvParseOutput;
     }
   }

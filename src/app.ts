@@ -41,14 +41,17 @@ export class App {
   }
 
   public async init(port: number): Promise<void> {
+    this.repositoryService.client.authenticate();
+    this.logger.log('Database initialized...');
+    await this.repositoryService.client.sync();
+    this.logger.log('All models are syncronized...');
+
     this.app = express();
     this.port = port;
 
     this.useMiddlewares();
     this.useRoutes();
     this.useExceptionFilter();
-
-    await this.repositoryService.client.sync();
 
     this.server = this.app.listen(this.port);
     this.server
