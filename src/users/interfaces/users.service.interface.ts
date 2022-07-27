@@ -1,8 +1,8 @@
-import { UserLoginDto } from '../../dto/user-login.dto.js';
-import { UserRegisterDto } from '../../dto/user-register.dto.js';
-import { User } from '../user.entity.js';
+import { UserModel } from '../../sequelize/models/user.model.js';
+import { UserLoginDto } from '../../users/dto/user-login.dto.js';
+import { UserRegisterDto } from '../../users/dto/user-register.dto.js';
 
 export interface IUsersService {
-  createUser: (dto: UserRegisterDto) => Promise<User | null>;
+  createUser: (dto: UserRegisterDto) => Promise<UserModel | null>;
   validateUser: (dto: UserLoginDto) => Promise<boolean>;
 }

@@ -12,6 +12,7 @@ import { UsersService } from './users/users.service.js';
 import { IConfigService } from './config/config.service.interface.js';
 import { ConfigService } from './config/config.service.js';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import { RepositoryService } from './database/repository.service.js';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
@@ -19,10 +20,11 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<IUsersController>(TYPES.IUsersController).to(UsersController);
   bind<IUsersService>(TYPES.IUsersService).to(UsersService);
   bind<IConfigService>(TYPES.IConfigService).to(ConfigService).inSingletonScope();
+  bind<RepositoryService>(TYPES.IRepositoryService).to(RepositoryService).inSingletonScope();
   bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
 });
 
-function bootstrap(): { app: App; appContainer: Container } {
+async function bootstrap(): Promise<{ app: App; appContainer: Container }> {
   const appContainer = new Container();
   appContainer.load(appBindings);
 
@@ -31,4 +33,4 @@ function bootstrap(): { app: App; appContainer: Container } {
   return { app, appContainer };
 }
 
-export const { app, appContainer } = bootstrap();
+export const { app, appContainer } = await bootstrap();

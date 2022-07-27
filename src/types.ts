@@ -5,4 +5,5 @@ export const TYPES = {
   IUsersService: Symbol.for('IUsersService'),
   IConfigService: Symbol.for('IConfigService'),
   IExceptionFilter: Symbol.for('IExceptionFilter'),
+  IRepositoryService: Symbol.for('RepositoryService'),
 };

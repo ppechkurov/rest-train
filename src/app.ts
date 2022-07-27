@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import express, { Express, NextFunction, Request, Response } from 'express';
-import { Server } from 'http';
 import { inject, injectable } from 'inversify';
+import { Server } from 'http';
 import { ILogger } from './services/logger.interface.js';
 import { TYPES } from './types.js';
 import { IUsersController } from './users/interfaces/users.controller.interface.js';
-import bodyParser from 'body-parser';
+import { RepositoryService } from './database/repository.service.js';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import bodyParser from 'body-parser';
 
 @injectable()
 export class App {
@@ -17,6 +18,7 @@ export class App {
   constructor(
     @inject(TYPES.ILogger) private logger: ILogger,
     @inject(TYPES.IUsersController) private usersController: IUsersController,
+    @inject(TYPES.IRepositoryService) private repositoryService: RepositoryService,
     @inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
   ) {}
 
@@ -26,6 +28,7 @@ export class App {
 
   useMiddlewares(): void {
     this.app.use(bodyParser.json());
+    this.app.use(express.urlencoded({ extended: true }));
     this.app.use((req: Request, res: Response, next: NextFunction) => {
       const { method, url } = req;
       this.logger.log(`Incoming ${method}-request: ${url}`);
@@ -37,7 +40,7 @@ export class App {
     this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
-  public init(port: number): void {
+  public async init(port: number): Promise<void> {
     this.app = express();
     this.port = port;
 
@@ -45,8 +48,9 @@ export class App {
     this.useRoutes();
     this.useExceptionFilter();
 
-    this.server = this.app.listen(this.port);
+    await this.repositoryService.client.sync();
 
+    this.server = this.app.listen(this.port);
     this.server
       .on('listening', () => {
         this.logger.log(`Server running on port ${this.port}...`);
