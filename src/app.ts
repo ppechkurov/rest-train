@@ -2,13 +2,14 @@ import 'reflect-metadata';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { Server } from 'http';
-import { ILogger } from './services/logger.interface.js';
-import { TYPES } from './types.js';
-import { IUsersController } from './users/interfaces/users.controller.interface.js';
-import { RepositoryService } from './database/repository.service.js';
-import { IExceptionFilter } from './errors/exception.filter.interface.js';
+import { ILogger } from './services/logger.interface';
+import { TYPES } from './types';
+import { IUsersController } from './users/interfaces/users.controller.interface';
+import { RepositoryService } from './database/repository.service';
+import { IExceptionFilter } from './errors/exception.filter.interface';
 import bodyParser from 'body-parser';
-import { IConfigService } from './config/config.service.interface.js';
+import { IConfigService } from './config/config.service.interface';
+import { AuthMiddleware } from './common/auth.middleware';
 
 @injectable()
 export class App {
@@ -31,6 +32,10 @@ export class App {
   useMiddlewares(): void {
     this.app.use(bodyParser.json());
     this.app.use(express.urlencoded({ extended: true }));
+
+    const authMiddleware = new AuthMiddleware(this.configService.get('JWT_SECRET'));
+    this.app.use(authMiddleware.execute.bind(authMiddleware));
+
     this.app.use((req: Request, res: Response, next: NextFunction) => {
       const { method, url } = req;
       this.logger.log(`Incoming ${method}-request: ${url}`);

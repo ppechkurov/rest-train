@@ -1,21 +1,21 @@
 import 'reflect-metadata';
 import { Container, ContainerModule, interfaces } from 'inversify';
-import { TYPES } from './types.js';
-import { App } from './app.js';
-import { ILogger } from './services/logger.interface.js';
-import { LoggerService } from './services/logger.service.js';
-import { UsersController } from './users/users.controller.js';
-import { ExceptionFilter } from './errors/exception.filter.class.js';
-import { IUsersController } from './users/interfaces/users.controller.interface.js';
-import { IUsersService } from './users/interfaces/users.service.interface.js';
-import { UsersService } from './users/users.service.js';
-import { IConfigService } from './config/config.service.interface.js';
-import { ConfigService } from './config/config.service.js';
-import { IExceptionFilter } from './errors/exception.filter.interface.js';
-import { RepositoryService } from './database/repository.service.js';
-import { DbConfig } from './database/db.config.js';
-import { IUsersRepository } from './users/interfaces/users.repository.interface.js';
-import { UsersRepository } from './users/users.repository.js';
+import { TYPES } from './types';
+import { App } from './app';
+import { ILogger } from './services/logger.interface';
+import { LoggerService } from './services/logger.service';
+import { UsersController } from './users/users.controller';
+import { ExceptionFilter } from './errors/exception.filter.class';
+import { IUsersController } from './users/interfaces/users.controller.interface';
+import { IUsersService } from './users/interfaces/users.service.interface';
+import { UsersService } from './users/users.service';
+import { IConfigService } from './config/config.service.interface';
+import { ConfigService } from './config/config.service';
+import { IExceptionFilter } from './errors/exception.filter.interface';
+import { RepositoryService } from './database/repository.service';
+import { DbConfig } from './database/db.config';
+import { IUsersRepository } from './users/interfaces/users.repository.interface';
+import { UsersRepository } from './users/users.repository';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
@@ -38,4 +38,4 @@ async function bootstrap(): Promise<{ app: App; appContainer: Container }> {
   return { app, appContainer };
 }
 
-export const { app, appContainer } = await bootstrap();
+export const boot = bootstrap();

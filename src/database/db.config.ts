@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { SequelizeOptions } from 'sequelize-typescript';
-import { TYPES } from '../types.js';
+import { TYPES } from '../types';
 import { IConfigService } from '../config/config.service.interface.js';
 import { Dialect } from 'sequelize';
 

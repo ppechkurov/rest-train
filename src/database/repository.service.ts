@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 import { Model, Repository, Sequelize } from 'sequelize-typescript';
-import { TYPES } from '../types.js';
-import { DbConfig } from './db.config.js';
-import { UserModel } from '../sequelize/models/user.model.js';
+import { TYPES } from '../types';
+import { DbConfig } from './db.config';
+import { UserModel } from '../sequelize/models/user.model';
 
 @injectable()
 export class RepositoryService {

@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { injectable } from 'inversify';
 import { Response, Router } from 'express';
-import { ILogger } from '../services/logger.interface.js';
-import { IRoute } from './route.interface.js';
+import { ILogger } from '../services/logger.interface';
+import { IRoute } from './route.interface';
 
 @injectable()
 export abstract class BaseController {

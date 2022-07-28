@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { injectable } from 'inversify';
-import { ILogger } from './logger.interface.js';
+import { ILogger } from './logger.interface';
 import { Logger } from 'tslog';
-import { HttpError } from '../errors/http-error.class.js';
+import { HttpError } from '../errors/http-error.class';
 
 @injectable()
 export class LoggerService implements ILogger {

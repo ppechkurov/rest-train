@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import { Repository } from 'sequelize-typescript';
-import { RepositoryService } from '../database/repository.service.js';
-import { UserModel } from '../sequelize/models/user.model.js';
-import { TYPES } from '../types.js';
-import { IUsersRepository } from './interfaces/users.repository.interface.js';
-import { User } from './user.entity.js';
+import { RepositoryService } from '../database/repository.service';
+import { UserModel } from '../sequelize/models/user.model';
+import { TYPES } from '../types';
+import { IUsersRepository } from './interfaces/users.repository.interface';
+import { User } from './user.entity';
 
 @injectable()
 export class UsersRepository implements IUsersRepository {

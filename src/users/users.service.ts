@@ -1,12 +1,12 @@
 import { inject, injectable } from 'inversify';
-import { IUsersService } from './interfaces/users.service.interface.js';
-import { TYPES } from '../types.js';
-import { IConfigService } from '../config/config.service.interface.js';
-import { UserModel } from '../sequelize/models/user.model.js';
-import { UserRegisterDto } from '../users/dto/user-register.dto.js';
-import { User } from './user.entity.js';
-import { UserLoginDto } from '../users/dto/user-login.dto.js';
-import { IUsersRepository } from './interfaces/users.repository.interface.js';
+import { IUsersService } from './interfaces/users.service.interface';
+import { TYPES } from '../types';
+import { IConfigService } from '../config/config.service.interface';
+import { UserModel } from '../sequelize/models/user.model';
+import { UserRegisterDto } from '../users/dto/user-register.dto';
+import { User } from './user.entity';
+import { UserLoginDto } from '../users/dto/user-login.dto';
+import { IUsersRepository } from './interfaces/users.repository.interface';
 
 @injectable()
 export class UsersService implements IUsersService {

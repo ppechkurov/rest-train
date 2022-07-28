@@ -1,17 +1,17 @@
 import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
-import { BaseController } from '../common/base.controller.js';
-import { IUsersController } from './interfaces/users.controller.interface.js';
-import { TYPES } from '../types.js';
-import { ILogger } from '../services/logger.interface.js';
-import { IUsersService } from './interfaces/users.service.interface.js';
+import { BaseController } from '../common/base.controller';
+import { IUsersController } from './interfaces/users.controller.interface';
+import { TYPES } from '../types';
+import { ILogger } from '../services/logger.interface';
+import { IUsersService } from './interfaces/users.service.interface';
 import { NextFunction, Request, Response } from 'express';
-import { UserLoginDto } from '../users/dto/user-login.dto.js';
-import { UserRegisterDto } from '../users/dto/user-register.dto.js';
-import { HttpError } from '../errors/http-error.class.js';
-import { ValidationMiddleware } from '../common/validation.middleware.js';
+import { UserLoginDto } from '../users/dto/user-login.dto';
+import { UserRegisterDto } from '../users/dto/user-register.dto';
+import { HttpError } from '../errors/http-error.class';
+import { ValidationMiddleware } from '../common/validation.middleware';
 import jwt from 'jsonwebtoken';
-import { IConfigService } from '../config/config.service.interface.js';
+import { IConfigService } from '../config/config.service.interface';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
@@ -33,6 +33,11 @@ export class UsersController extends BaseController implements IUsersController 
         method: 'post',
         func: this.register,
         middlewares: [new ValidationMiddleware(UserRegisterDto)],
+      },
+      {
+        path: '/info',
+        method: 'get',
+        func: this.info,
       },
     ]);
   }
@@ -56,6 +61,14 @@ export class UsersController extends BaseController implements IUsersController 
     const result = await this.usersService.createUser(body);
     if (!result) return next(new HttpError(422, 'This user already exists'));
     this.sendOk(res, result);
+  }
+
+  public async info(
+    { user }: Request<{}, {}, UserRegisterDto>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    this.sendOk(res, { user });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {
