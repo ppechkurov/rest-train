@@ -9,14 +9,16 @@ import { NextFunction, Request, Response } from 'express';
 import { UserLoginDto } from '../users/dto/user-login.dto.js';
 import { UserRegisterDto } from '../users/dto/user-register.dto.js';
 import { HttpError } from '../errors/http-error.class.js';
-import { User } from './user.entity.js';
 import { ValidationMiddleware } from '../common/validation.middleware.js';
+import jwt from 'jsonwebtoken';
+import { IConfigService } from '../config/config.service.interface.js';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
   constructor(
     @inject(TYPES.Logger) loggerService: ILogger,
     @inject(TYPES.UsersService) private usersService: IUsersService,
+    @inject(TYPES.ConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
     this.bindRoutes([
@@ -42,7 +44,8 @@ export class UsersController extends BaseController implements IUsersController 
   ): Promise<void> {
     const result = await this.usersService.validateUser(body);
     if (!result) return next(new HttpError(401, 'Authorization error'));
-    this.sendOk(res, 'Authorization successful!');
+    const jwt = await this.signJWT(body.email, this.configService.get('JWT_SECRET'));
+    this.sendOk(res, jwt);
   }
 
   public async register(
@@ -53,5 +56,26 @@ export class UsersController extends BaseController implements IUsersController 
     const result = await this.usersService.createUser(body);
     if (!result) return next(new HttpError(422, 'This user already exists'));
     this.sendOk(res, result);
+  }
+
+  private signJWT(email: string, secret: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      jwt.sign(
+        {
+          email,
+          iat: Math.floor(Date.now() / 1000),
+        },
+        secret,
+        {
+          algorithm: 'HS256',
+        },
+        (err, token) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(token as string);
+        },
+      );
+    });
   }
 }
