@@ -13,8 +13,8 @@ export class UsersRepository implements IUsersRepository {
     this.users = repositoryService.getRepository(UserModel);
   }
 
-  async create({ name, email, password }: User): Promise<UserModel> {
-    return this.users.create({ name, email, password });
+  async create({ name, email, passwordHash }: User): Promise<UserModel> {
+    return this.users.create({ name, email, hash: passwordHash });
   }
 
   async find(email: string): Promise<UserModel | null> {

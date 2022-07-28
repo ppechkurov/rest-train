@@ -24,6 +24,7 @@ export class UsersController extends BaseController implements IUsersController 
         path: '/login',
         method: 'get',
         func: this.login,
+        middlewares: [new ValidationMiddleware(UserLoginDto)],
       },
       {
         path: '/register',
@@ -34,12 +35,17 @@ export class UsersController extends BaseController implements IUsersController 
     ]);
   }
 
-  login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-    const user = new User(req.body.email, req.body.password);
-    this.sendOk(res, user);
+  public async login(
+    { body }: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const result = await this.usersService.validateUser(body);
+    if (!result) return next(new HttpError(401, 'Authorization error'));
+    this.sendOk(res, 'Authorization successful!');
   }
 
-  async register(
+  public async register(
     { body }: Request<{}, {}, UserRegisterDto>,
     res: Response,
     next: NextFunction,

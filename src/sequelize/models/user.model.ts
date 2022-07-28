@@ -17,5 +17,5 @@ export class UserModel extends Model<
   declare email: string;
 
   @Column
-  declare password: string;
+  declare hash: string;
 }

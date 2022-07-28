@@ -22,7 +22,11 @@ export class UsersService implements IUsersService {
     return await this.users.create(user).catch(() => null);
   }
 
-  async validateUser(dto: UserLoginDto): Promise<boolean> {
-    return true;
+  async validateUser({ email, password }: UserLoginDto): Promise<boolean> {
+    const result = await this.users.find(email);
+    if (!result) return false;
+
+    const user = new User(result.email, result.name, result.hash);
+    return user.compareHash(password);
   }
 }

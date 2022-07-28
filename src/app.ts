@@ -8,6 +8,7 @@ import { IUsersController } from './users/interfaces/users.controller.interface.
 import { RepositoryService } from './database/repository.service.js';
 import { IExceptionFilter } from './errors/exception.filter.interface.js';
 import bodyParser from 'body-parser';
+import { IConfigService } from './config/config.service.interface.js';
 
 @injectable()
 export class App {
@@ -19,6 +20,7 @@ export class App {
     @inject(TYPES.Logger) private logger: ILogger,
     @inject(TYPES.UsersController) private usersController: IUsersController,
     @inject(TYPES.RepositoryService) private repositoryService: RepositoryService,
+    @inject(TYPES.ConfigService) private configService: IConfigService,
     @inject(TYPES.ExceptionFilter) private exceptionFilter: IExceptionFilter,
   ) {}
 
@@ -64,7 +66,9 @@ export class App {
   private async initDB(): Promise<void> {
     await this.repositoryService.client.authenticate();
     this.logger.log('Database initialized...');
-    await this.repositoryService.client.sync();
+    await this.repositoryService.client.sync({
+      alter: this.configService.get('NODE_ENV') !== 'production',
+    });
     this.logger.log('All models are syncronized...');
   }
 }
