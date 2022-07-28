@@ -12,6 +12,7 @@ import { HttpError } from '../errors/http-error.class';
 import { ValidationMiddleware } from '../common/validation.middleware';
 import jwt from 'jsonwebtoken';
 import { IConfigService } from '../config/config.service.interface';
+import { AuthGuard } from '../common/auth.guard';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
@@ -38,6 +39,7 @@ export class UsersController extends BaseController implements IUsersController 
         path: '/info',
         method: 'get',
         func: this.info,
+        middlewares: [new AuthGuard()],
       },
     ]);
   }
@@ -68,7 +70,9 @@ export class UsersController extends BaseController implements IUsersController 
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    this.sendOk(res, { user });
+    const result = await this.usersService.getInfo(user);
+    if (!result) return next(new HttpError(422, 'No such user'));
+    this.sendOk(res, { info: result });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {

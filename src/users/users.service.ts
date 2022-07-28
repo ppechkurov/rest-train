@@ -29,4 +29,9 @@ export class UsersService implements IUsersService {
     const user = new User(result.email, result.name, result.hash);
     return user.compareHash(password);
   }
+
+  async getInfo(email: string): Promise<UserModel | null> {
+    const result = await this.users.getInfo(email);
+    return result ?? null;
+  }
 }

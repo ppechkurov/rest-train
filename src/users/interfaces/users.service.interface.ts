@@ -5,4 +5,5 @@ import { UserRegisterDto } from '../../users/dto/user-register.dto.js';
 export interface IUsersService {
   createUser: (dto: UserRegisterDto) => Promise<UserModel | null>;
   validateUser: (dto: UserLoginDto) => Promise<boolean>;
+  getInfo: (email: string) => Promise<UserModel | null>;
 }
