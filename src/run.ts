@@ -34,7 +34,7 @@ async function bootstrap(): Promise<{ app: App; appContainer: Container }> {
   appContainer.load(appBindings);
 
   const app = appContainer.get<App>(TYPES.Application);
-  app.init(Number(process.env.PORT) || 5000);
+  await app.init(Number(process.env.PORT) || 5000);
   return { app, appContainer };
 }
 

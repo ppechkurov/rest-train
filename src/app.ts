@@ -76,4 +76,9 @@ export class App {
     });
     this.logger.log('All models are syncronized...');
   }
+
+  public async close(): Promise<void> {
+    await this.repositoryService.client.close();
+    this.server.close();
+  }
 }

@@ -9,12 +9,15 @@ export class DbConfig {
   public readonly options: SequelizeOptions;
 
   constructor(@inject(TYPES.ConfigService) private configService: IConfigService) {
+    const env = process.env.NODE_ENV ?? this.configService.get('NODE_ENV');
+
     this.options = {
-      database: this.configService.get('DB_NAME'),
+      database: env === 'test' ? 'test_db' : this.configService.get('DB_NAME'),
       username: this.configService.get('DB_USER'),
       password: this.configService.get('DB_PASSWORD'),
       dialect: this.configService.get('DB_DIALECT') as Dialect,
-      logging: this.configService.get('NODE_ENV') === 'production' ? true : false,
+      logging: env === 'production' ? true : false,
     };
+    console.log(this.options);
   }
 }
