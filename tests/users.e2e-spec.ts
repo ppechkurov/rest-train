@@ -37,7 +37,7 @@ describe('Users e2e', () => {
     user.setPassword('1', 'salt');
 
     const { name, email, passwordHash } = user;
-    testUser = await usersRepository.create({ name, email, hash: passwordHash });
+    testUser = await usersRepository.create({ nickname, email, password: passwordHash });
 
     const res = await request(application.app)
       .post('/users/register')

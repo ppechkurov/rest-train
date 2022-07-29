@@ -15,8 +15,8 @@ export class UsersService implements IUsersService {
     @inject(TYPES.UsersRepository) private users: IUsersRepository,
   ) {}
 
-  async createUser({ email, name, password }: UserRegisterDto): Promise<UserModel | null> {
-    const user = new User(email, name);
+  async createUser({ email, nickname, password }: UserRegisterDto): Promise<UserModel | null> {
+    const user = new User(email, nickname);
     const salt = this.configService.get('SALT');
     await user.setPassword(password, salt);
     return await this.users.create(user).catch(() => null);
@@ -26,7 +26,7 @@ export class UsersService implements IUsersService {
     const result = await this.users.find(email);
     if (!result) return false;
 
-    const user = new User(result.email, result.name, result.hash);
+    const user = new User(result.email, result.nickname, result.password);
     return user.compareHash(password);
   }
 

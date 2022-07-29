@@ -1,27 +1,27 @@
 import { compare, hash } from 'bcrypt';
 export class User {
-  constructor(private readonly _email: string, private readonly _name: string, hash?: string) {
-    if (hash) this._passwordHash = hash;
+  constructor(private readonly _email: string, private readonly _nickname: string, hash?: string) {
+    if (hash) this._password = hash;
   }
 
   get email(): string {
     return this._email;
   }
 
-  get name(): string {
-    return this._name;
+  get nickname(): string {
+    return this._nickname;
   }
 
-  private _passwordHash: string;
-  get passwordHash(): string {
-    return this._passwordHash;
+  private _password: string;
+  get password(): string {
+    return this._password;
   }
 
   public async setPassword(password: string, salt: string): Promise<void> {
-    this._passwordHash = await hash(password, Number(salt));
+    this._password = await hash(password, Number(salt));
   }
 
   public async compareHash(password: string): Promise<boolean> {
-    return compare(password, this.passwordHash);
+    return compare(password, this.password);
   }
 }

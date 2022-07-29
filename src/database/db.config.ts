@@ -3,12 +3,16 @@ import { SequelizeOptions } from 'sequelize-typescript';
 import { TYPES } from '../types';
 import { IConfigService } from '../config/config.service.interface.js';
 import { Dialect } from 'sequelize';
+import { ILogger } from '../services/logger.interface';
 
 @injectable()
 export class DbConfig {
   public readonly options: SequelizeOptions;
 
-  constructor(@inject(TYPES.ConfigService) private configService: IConfigService) {
+  constructor(
+    @inject(TYPES.ConfigService) private configService: IConfigService,
+    @inject(TYPES.Logger) private logger: ILogger,
+  ) {
     const env = process.env.NODE_ENV ?? this.configService.get('NODE_ENV');
 
     this.options = {
@@ -16,8 +20,7 @@ export class DbConfig {
       username: this.configService.get('DB_USER'),
       password: this.configService.get('DB_PASSWORD'),
       dialect: this.configService.get('DB_DIALECT') as Dialect,
-      logging: env === 'production' ? true : false,
+      logging: env === 'production' ? false : (sql): void => this.logger.log(sql),
     };
-    console.log(this.options);
   }
 }

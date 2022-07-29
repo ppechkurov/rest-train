@@ -7,15 +7,18 @@ export class UserModel extends Model<
   InferAttributes<UserModel>,
   InferCreationAttributes<UserModel>
 > {
-  @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
-  declare id: CreationOptional<number>;
+  // @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
+  // declare id: CreationOptional<number>;
 
-  @Column
-  declare name: string;
+  @Column({ primaryKey: true, type: DataType.UUID, defaultValue: DataType.UUIDV4 })
+  declare uid: CreationOptional<string>;
 
-  @Column({ unique: true })
+  @Column({ unique: true, type: DataType.STRING(100) })
   declare email: string;
 
-  @Column
-  declare hash: string;
+  @Column({ type: DataType.STRING(100) })
+  declare nickname: string;
+
+  @Column({ type: DataType.STRING(100) })
+  declare password: string;
 }
