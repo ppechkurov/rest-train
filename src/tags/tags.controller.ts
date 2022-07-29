@@ -9,6 +9,7 @@ import { TagCreateDto } from './dto/tag-create.dto';
 import { ITagsService } from './interfaces/tags.service.interface';
 import { HttpError } from '../errors/http-error.class';
 import { AuthGuard } from '../common/auth.guard';
+import { QueryDto } from './dto/query.dto';
 
 @injectable()
 export class TagsController extends BaseController implements ITagsController {
@@ -32,6 +33,12 @@ export class TagsController extends BaseController implements ITagsController {
         func: this.findById,
         middlewares: [new AuthGuard()],
       },
+      {
+        path: '/',
+        method: 'get',
+        func: this.findAll,
+        middlewares: [new AuthGuard()],
+      },
     ]);
   }
 
@@ -50,5 +57,16 @@ export class TagsController extends BaseController implements ITagsController {
   async findById(req: Request, res: Response, next: NextFunction): Promise<void> {
     const result = await this.tagsService.findById(Number(req.params.id));
     this.sendOk(res, result);
+  }
+
+  async findAll({ query }: Request, res: Response, next: NextFunction): Promise<void> {
+    const result = await this.tagsService.findAll({
+      offset: Number(query.offset),
+      length: Number(query.length),
+      sortByOrder: Number(query.sortByOrder),
+      sortByName: Number(query.sortByName),
+    });
+
+    this.sendOk(res, { result, query });
   }
 }

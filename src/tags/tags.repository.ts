@@ -4,6 +4,7 @@ import { RepositoryService } from '../database/repository.service';
 import { TagModel } from '../sequelize/models/tag.model';
 import { UserModel } from '../sequelize/models/user.model';
 import { TYPES } from '../types';
+import { QueryDto } from './dto/query.dto';
 import { ITagsRepository } from './interfaces/tags.repository.interface';
 import { Tag } from './tag.entity';
 
@@ -21,8 +22,16 @@ export class TagsRepository implements ITagsRepository {
   async findById(id: number): Promise<TagModel | null> {
     return this.tags.findByPk(id, { include: UserModel, attributes: { exclude: ['creatorId'] } });
   }
-  //
-  // async getInfo(email: string): Promise<UserModel | null> {
-  //   return this.users.findOne({ where: { email }, attributes: ['id', 'email', 'name'] });
-  // }
+
+  async findAll({ offset, length, sortByOrder, sortByName }: QueryDto): Promise<TagModel[] | null> {
+    const order = [];
+    if (sortByOrder > 0) order.push('sortOrder');
+    if (sortByName > 0) order.push('name');
+    const result = await this.tags.findAll({
+      offset,
+      limit: length,
+      order: order.length ? order : undefined,
+    });
+    return result;
+  }
 }
