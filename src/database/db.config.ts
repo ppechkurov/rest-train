@@ -20,7 +20,7 @@ export class DbConfig {
       username: this.configService.get('DB_USER'),
       password: this.configService.get('DB_PASSWORD'),
       dialect: this.configService.get('DB_DIALECT') as Dialect,
-      logging: env === 'production' ? false : (sql): void => this.logger.log(sql),
+      logging: env === 'production' || env === 'test' ? false : (sql): void => this.logger.log(sql),
     };
   }
 }

@@ -41,26 +41,26 @@ describe('UserService', () => {
       configService.get = jest.fn().mockReturnValueOnce('1');
 
       usersRepository.create = jest.fn().mockImplementationOnce(async (user: User) => ({
-        name: user.name,
+        name: user.nickname,
         email: user.email,
-        hash: user.passwordHash,
-        id: 1,
+        password: user.password,
+        uid: 'testuid',
       }));
 
       createdUser = await usersService.createUser({
         email: 'p@p.com',
-        name: 'patrick',
+        nickname: 'patrick',
         password: '1',
       });
 
-      expect(createdUser?.id).toEqual(1);
-      expect(createdUser?.hash).not.toEqual(1);
+      expect(createdUser?.uid).toEqual('testuid');
+      expect(createdUser?.password).not.toEqual(1);
     });
   });
 
   describe('method validateUser', () => {
     describe('returns', () => {
-      describe('true when:', () => {
+      describe('true when', () => {
         it('found a user', async () => {
           usersRepository.find = jest.fn().mockReturnValueOnce(createdUser);
 
@@ -68,12 +68,13 @@ describe('UserService', () => {
             email: 'p@p.com',
             password: '1',
           });
+          console.log(result);
 
           expect(result).toBeTruthy();
         });
       });
 
-      describe('false when:', () => {
+      describe('false when', () => {
         it('provided wrong password', async () => {
           usersRepository.find = jest.fn().mockReturnValueOnce(createdUser);
 

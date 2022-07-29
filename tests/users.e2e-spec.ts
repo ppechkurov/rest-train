@@ -21,11 +21,11 @@ describe('Users e2e', () => {
   it('register - success', async () => {
     const user = new User('p@p.com', 'pat');
     user.setPassword('1', 'salt');
-    const { name, email } = user;
+    const { nickname, email } = user;
 
     const res = await request(application.app)
       .post('/users/register')
-      .send({ name, email, password: '1' });
+      .send({ nickname, email, password: '1' });
 
     expect(res.statusCode).toBe(201);
     expect(res.body).not.toHaveProperty('error');
@@ -36,12 +36,12 @@ describe('Users e2e', () => {
     const user = new User('p@p.com', 'pat');
     user.setPassword('1', 'salt');
 
-    const { name, email, passwordHash } = user;
-    testUser = await usersRepository.create({ nickname, email, password: passwordHash });
+    const { nickname, email, password } = user;
+    testUser = await usersRepository.create({ nickname, email, password });
 
     const res = await request(application.app)
       .post('/users/register')
-      .send({ name: testUser.name, email: testUser.email, password: '1' });
+      .send({ nickname: testUser.nickname, email: testUser.email, password: '1' });
 
     expect(res.statusCode).toBe(422);
     expect(res.body).toHaveProperty('error');
@@ -49,7 +49,7 @@ describe('Users e2e', () => {
 });
 
 afterEach(async () => {
-  await usersRepository.destroy({ where: { id: testUser.id } });
+  await usersRepository.destroy({ where: { uid: testUser.uid } });
 });
 
 afterAll(async () => {
