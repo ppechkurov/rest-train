@@ -26,6 +26,12 @@ export class TagsController extends BaseController implements ITagsController {
         func: this.create,
         middlewares: [new ValidationMiddleware(TagCreateDto), new AuthGuard()],
       },
+      {
+        path: '/:id',
+        method: 'get',
+        func: this.findById,
+        middlewares: [new AuthGuard()],
+      },
     ]);
   }
 
@@ -36,6 +42,13 @@ export class TagsController extends BaseController implements ITagsController {
   ): Promise<void> {
     const result = await this.tagsService.createTag(body, user);
     if (!result) return next(new HttpError(422, 'error creating tag'));
-    res.json({ ok: result });
+
+    const { id, name, sortOrder } = result;
+    this.sendCreated(res, { id, name, sortOrder });
+  }
+
+  async findById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const result = await this.tagsService.findById(Number(req.params.id));
+    this.sendOk(res, result);
   }
 }

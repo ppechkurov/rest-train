@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import { TagModel } from './tag.model';
 
 @Table({ timestamps: false, tableName: 'Users' })
 export class UserModel extends Model<
@@ -9,6 +10,8 @@ export class UserModel extends Model<
 > {
   // @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   // declare id: CreationOptional<number>;
+  @HasMany(() => TagModel)
+  tags: CreationOptional<TagModel[]>;
 
   @Column({ primaryKey: true, type: DataType.UUID, defaultValue: DataType.UUIDV4 })
   declare uid: CreationOptional<string>;

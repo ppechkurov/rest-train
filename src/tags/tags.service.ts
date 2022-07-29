@@ -19,7 +19,11 @@ export class TagsService implements ITagsService {
     const creator = await this.users.find(userEmail);
     if (!creator) return null;
 
-    newTag.creator = creator.uid;
+    newTag.creatorId = creator.uid;
     return this.tags.create(newTag);
+  }
+
+  async findById(id: number): Promise<TagModel | null> {
+    return this.tags.findById(id);
   }
 }
