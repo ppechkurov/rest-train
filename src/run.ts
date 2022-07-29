@@ -16,17 +16,26 @@ import { RepositoryService } from './database/repository.service';
 import { DbConfig } from './database/db.config';
 import { IUsersRepository } from './users/interfaces/users.repository.interface';
 import { UsersRepository } from './users/users.repository';
+import { ITagsController } from './tags/interfaces/tags.controller.interface';
+import { TagsController } from './tags/tags.controller';
+import { ITagsService } from './tags/interfaces/tags.service.interface';
+import { TagsService } from './tags/tags.service';
+import { ITagsRepository } from './tags/interfaces/tags.repository.interface';
+import { TagsRepository } from './tags/tags.repository';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
   bind<ILogger>(TYPES.Logger).to(LoggerService).inSingletonScope();
   bind<IUsersController>(TYPES.UsersController).to(UsersController);
+  bind<ITagsController>(TYPES.TagsController).to(TagsController);
   bind<IUsersService>(TYPES.UsersService).to(UsersService);
+  bind<ITagsService>(TYPES.TagsService).to(TagsService);
   bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
   bind<RepositoryService>(TYPES.RepositoryService).to(RepositoryService).inSingletonScope();
   bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter);
   bind<DbConfig>(TYPES.DbConfig).to(DbConfig).inSingletonScope();
   bind<IUsersRepository>(TYPES.UsersRepository).to(UsersRepository).inSingletonScope();
+  bind<ITagsRepository>(TYPES.TagsRepository).to(TagsRepository).inSingletonScope();
 });
 
 async function bootstrap(): Promise<{ app: App; appContainer: Container }> {

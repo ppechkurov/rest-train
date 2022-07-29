@@ -19,6 +19,6 @@ export class UserModel extends Model<
   @Column({ type: DataType.STRING(100) })
   declare nickname: string;
 
-  @Column({ type: DataType.STRING(100) })
+  @Column({ type: DataType.STRING(60) })
   declare password: string;
 }

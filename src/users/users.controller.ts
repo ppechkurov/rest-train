@@ -70,8 +70,9 @@ export class UsersController extends BaseController implements IUsersController 
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    const result = await this.usersService.getInfo(user);
-    if (!result) return next(new HttpError(422, 'No such user'));
+    const result = await this.usersService.getInfo(user).catch((err) => err);
+    if (!result || result instanceof Error)
+      return next(new HttpError(422, result.message ?? 'No such user'));
     this.sendOk(res, { info: result });
   }
 

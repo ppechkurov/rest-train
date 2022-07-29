@@ -10,6 +10,7 @@ import { IExceptionFilter } from './errors/exception.filter.interface';
 import bodyParser from 'body-parser';
 import { IConfigService } from './config/config.service.interface';
 import { AuthMiddleware } from './common/auth.middleware';
+import { ITagsController } from './tags/interfaces/tags.controller.interface';
 
 @injectable()
 export class App {
@@ -20,6 +21,7 @@ export class App {
   constructor(
     @inject(TYPES.Logger) private logger: ILogger,
     @inject(TYPES.UsersController) private usersController: IUsersController,
+    @inject(TYPES.TagsController) private tagsController: ITagsController,
     @inject(TYPES.RepositoryService) private repositoryService: RepositoryService,
     @inject(TYPES.ConfigService) private configService: IConfigService,
     @inject(TYPES.ExceptionFilter) private exceptionFilter: IExceptionFilter,
@@ -27,6 +29,7 @@ export class App {
 
   useRoutes(): void {
     this.app.use('/users', this.usersController.router);
+    this.app.use('/tags', this.tagsController.router);
   }
 
   useMiddlewares(): void {

@@ -4,6 +4,7 @@ import { Model, Repository, Sequelize } from 'sequelize-typescript';
 import { TYPES } from '../types';
 import { DbConfig } from './db.config';
 import { UserModel } from '../sequelize/models/user.model';
+import { TagModel } from '../sequelize/models/tag.model';
 
 @injectable()
 export class RepositoryService {
@@ -15,7 +16,7 @@ export class RepositoryService {
 
   private init({ options }: DbConfig): void {
     this.client = new Sequelize(options);
-    this.client.addModels([UserModel]);
+    this.client.addModels([UserModel, TagModel]);
   }
 
   public getRepository<T extends Model>(modelClass: new () => T): Repository<T> {

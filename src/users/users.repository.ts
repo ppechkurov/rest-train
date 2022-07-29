@@ -22,6 +22,6 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async getInfo(email: string): Promise<UserModel | null> {
-    return this.users.findOne({ where: { email }, attributes: ['id', 'email', 'name'] });
+    return this.users.findOne({ where: { email }, attributes: ['uid', 'email', 'nickname'] });
   }
 }
