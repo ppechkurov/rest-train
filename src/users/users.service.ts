@@ -24,7 +24,6 @@ export class UsersService implements IUsersService {
 
   async validateUser({ email, password }: UserLoginDto): Promise<boolean> {
     const result = await this.users.find(email);
-    console.log(result);
     if (!result) return false;
 
     const user = new User(result.email, result.nickname, result.password);

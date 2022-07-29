@@ -68,7 +68,6 @@ describe('UserService', () => {
             email: 'p@p.com',
             password: '1',
           });
-          console.log(result);
 
           expect(result).toBeTruthy();
         });
