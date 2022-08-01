@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 import { TagModel } from '../sequelize/models/tag.model';
 import { TYPES } from '../types';
