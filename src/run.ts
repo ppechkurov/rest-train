@@ -22,6 +22,8 @@ import { ITagsService } from './tags/interfaces/tags.service.interface';
 import { TagsService } from './tags/tags.service';
 import { ITagsRepository } from './tags/interfaces/tags.repository.interface';
 import { TagsRepository } from './tags/tags.repository';
+import { JwtService } from './services/jwt.service';
+import { IJwtService } from './services/jwt.service.interface';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<App>(TYPES.Application).to(App);
@@ -32,6 +34,7 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ITagsService>(TYPES.TagsService).to(TagsService);
   bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
   bind<RepositoryService>(TYPES.RepositoryService).to(RepositoryService).inSingletonScope();
+  bind<IJwtService>(TYPES.JwtService).to(JwtService).inSingletonScope();
   bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter);
   bind<DbConfig>(TYPES.DbConfig).to(DbConfig).inSingletonScope();
   bind<IUsersRepository>(TYPES.UsersRepository).to(UsersRepository).inSingletonScope();

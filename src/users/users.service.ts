@@ -22,12 +22,13 @@ export class UsersService implements IUsersService {
     return await this.users.create(user).catch(() => null);
   }
 
-  async validateUser({ email, password }: UserLoginDto): Promise<boolean> {
+  async validateUser({ email, password }: UserLoginDto): Promise<UserModel | null> {
     const result = await this.users.find(email);
-    if (!result) return false;
+    if (!result) return null;
 
     const user = new User(result.email, result.nickname, result.password);
-    return user.compareHash(password);
+    const isValidUser = await user.compareHash(password);
+    return isValidUser ? result : null;
   }
 
   async getInfo(email: string): Promise<UserModel | null> {

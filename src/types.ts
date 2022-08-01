@@ -10,5 +10,6 @@ export const TYPES = {
   RepositoryService: Symbol.for('RepositoryService'),
   UsersRepository: Symbol.for('UsersRepository'),
   TagsRepository: Symbol.for('TagsRepository'),
+  JwtService: Symbol.for('JwtService'),
   DbConfig: Symbol.for('DbConfig'),
 };
