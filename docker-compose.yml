@@ -1,0 +1,19 @@
+# Define the services/containers to be run.
+services:
+  node_backend:
+    container_name: node_back
+    image: rest_train_app
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      - POSTGRES_USER=rest_train
+      - POSTGRES_PASSWORD=0015
+      - POSTGRES_DB=rest_train

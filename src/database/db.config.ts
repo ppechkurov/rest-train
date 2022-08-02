@@ -21,6 +21,8 @@ export class DbConfig {
       password: this.configService.get('DB_PASSWORD'),
       dialect: this.configService.get('DB_DIALECT') as Dialect,
       logging: env === 'production' || env === 'test' ? false : (sql): void => this.logger.log(sql),
+      port: Number(this.configService.get('PG_PORT')),
+      host: this.configService.get('PG_HOST'),
     };
   }
 }
