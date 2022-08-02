@@ -70,12 +70,15 @@ export class UsersController extends BaseController implements IUsersController 
     res.cookie('refreshToken', jwt.refreshToken, {
       maxAge: 15 * 24 * 60 * 60 * 1000,
       httpOnly: true,
+      signed: true,
+      secure: true,
+      path: '/users/refresh',
     });
     this.sendOk(res, { ...jwt, user: new UserTokenDto(result) });
   }
 
   public async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
-    res.clearCookie('refreshToken');
+    res.clearCookie('refreshToken', { secure: true, httpOnly: true, path: '/users/refresh' });
     this.sendOk(res, { message: 'logout' });
   }
 
@@ -90,10 +93,12 @@ export class UsersController extends BaseController implements IUsersController 
   }
 
   public async info(
-    { user }: Request<{}, {}, UserRegisterDto>,
+    { user, signedCookies }: Request<{}, {}, UserRegisterDto>,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
+    const { refreshToken } = signedCookies;
+    console.log('signedCookies: ', refreshToken);
     const result = await this.usersService.getInfo(user).catch((err) => err);
     if (!result || result instanceof Error)
       return next(new HttpError(422, result.message ?? 'No such user'));
@@ -101,7 +106,7 @@ export class UsersController extends BaseController implements IUsersController 
   }
 
   public async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { refreshToken } = req.cookies;
+    const { refreshToken } = req.signedCookies;
     res.json(refreshToken);
   }
 }

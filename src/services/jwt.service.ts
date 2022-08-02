@@ -18,13 +18,13 @@ export class JwtService implements IJwtService {
     user: UserModel,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const [accessToken, refreshToken] = await Promise.all([
-      this.sign(user.id, user.email, this.accessSecret),
-      this.sign(user.id, user.email, this.refreshSecret),
+      this.sign(user.id, user.email, this.accessSecret, '15s'),
+      this.sign(user.id, user.email, this.refreshSecret, '1d'),
     ]);
     return { accessToken, refreshToken };
   }
 
-  private async sign(id: string, email: string, secret: string): Promise<string> {
+  private async sign(id: string, email: string, secret: string, lifetime: string): Promise<string> {
     return new Promise((resolve, reject) => {
       jwt.sign(
         {
@@ -35,7 +35,7 @@ export class JwtService implements IJwtService {
         secret,
         {
           algorithm: 'HS256',
-          expiresIn: '10m',
+          expiresIn: lifetime,
         },
         (err, token) => {
           if (err) {

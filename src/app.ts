@@ -36,7 +36,7 @@ export class App {
   useMiddlewares(): void {
     this.app.use(bodyParser.json());
     this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cookieParser());
+    this.app.use(cookieParser('secret'));
 
     const authMiddleware = new AuthMiddleware(this.configService.get('JWT_ACCESS_SECRET'));
     this.app.use(authMiddleware.execute.bind(authMiddleware));
