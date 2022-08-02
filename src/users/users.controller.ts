@@ -20,7 +20,7 @@ export class UsersController extends BaseController implements IUsersController 
   constructor(
     @inject(TYPES.Logger) loggerService: ILogger,
     @inject(TYPES.UsersService) private usersService: IUsersService,
-    @inject(TYPES.JwtService) private jswService: IJwtService,
+    @inject(TYPES.JwtService) private jwtService: IJwtService,
     @inject(TYPES.ConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
@@ -66,7 +66,7 @@ export class UsersController extends BaseController implements IUsersController 
     const result = await this.usersService.validateUser(body);
     if (!result) return next(new HttpError(401, 'Authorization error'));
 
-    const jwt = await this.jswService.generateTokens(result);
+    const jwt = await this.jwtService.generateTokens(result);
     res.cookie('refreshToken', jwt.refreshToken, {
       maxAge: 15 * 24 * 60 * 60 * 1000,
       httpOnly: true,
@@ -107,6 +107,22 @@ export class UsersController extends BaseController implements IUsersController 
 
   public async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { refreshToken } = req.signedCookies;
-    res.json(refreshToken);
+    if (!refreshToken) return next(new HttpError(401, 'unauthorized'));
+
+    const userData = this.jwtService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await this.jwtService.findRefreshToken(refreshToken);
+
+    if (!userData || !tokenFromDb) return next(new HttpError(401, 'unauthorized'));
+
+    const user = await this.usersService.findUser(userData.email)!;
+    const jwt = await this.jwtService.generateTokens(user!);
+    res.cookie('refreshToken', jwt.refreshToken, {
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      signed: true,
+      secure: true,
+      path: '/users/refresh',
+    });
+    this.sendOk(res, { ...jwt, user: new UserTokenDto(user!) });
   }
 }

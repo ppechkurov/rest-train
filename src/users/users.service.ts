@@ -31,6 +31,10 @@ export class UsersService implements IUsersService {
     return isValidUser ? result : null;
   }
 
+  async findUser(email: string): Promise<UserModel | null> {
+    return await this.users.find(email);
+  }
+
   async getInfo(email: string): Promise<UserModel | null> {
     const result = await this.users.getInfo(email);
     return result ?? null;
